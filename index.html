@@ -2,928 +2,898 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Quiz</title>
-    <style>
-        :root {
-            --bg-color: #0d0621;
-            --panel-bg: rgba(28, 14, 58, 0.85);
-            --purple-glow: #9b51e0;
-            --yellow-accent: #f2c94c;
-            --green-accent: #27ae60;
-            --text-color: #ffffff;
-            --text-secondary: #b0aec4;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 20%, #2b1055 0%, #0d0621 80%);
-        }
-
-        .phone-container {
-            width: 100%;
-            max-width: 420px;
-            height: 850px;
-            background: linear-gradient(135deg, #150938 0%, #0d0621 100%);
-            border: 4px solid #3a1c71;
-            border-radius: 30px;
-            box-shadow: 0 0 30px rgba(155, 81, 224, 0.3);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Screens Management */
-        .screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            padding: 20px;
-            overflow-y: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--bg-color);
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* Common Elements */
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-icon {
-            background: #28154c;
-            border: 1px solid #4a258a;
-            border-radius: 12px;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            color: white;
-            font-size: 18px;
-            transition: 0.2s;
-        }
-
-        .btn-icon:hover {
-            background: #3c206f;
-        }
-
-        .screen-title {
-            font-size: 14px;
-            letter-spacing: 2px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        /* 1. ACCUEIL */
-        #accueil {
-            align-items: center;
-            text-align: center;
-        }
-
-        .top-nav-accueil {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-title-container {
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .logo-title {
-            font-size: 42px;
-            font-weight: 900;
-            font-style: italic;
-            line-height: 1;
-        }
-
-        .logo-title span:nth-child(1) { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .logo-title span:nth-child(2) { color: #f2c94c; text-shadow: 0 0 15px rgba(242,201,76,0.6); }
-
-        .user-card-accueil {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #4a258a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            overflow: hidden;
-            border: 2px solid #9b51e0;
-            margin-right: 12px;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .user-info {
-            flex-grow: 1;
-            text-align: left;
-        }
-
-        .user-info h4 {
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .badge-lvl {
-            background: #5b21b6;
-            color: #d8b4fe;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #110826;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, #f2994a, #f2c94c);
-            border-radius: 3px;
-        }
-
-        .streak-card {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 16px;
-            padding: 12px;
-            min-width: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .streak-card .fire {
-            font-size: 20px;
-            color: #f2994a;
-        }
-
-        .streak-card .count {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .streak-card .label {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-main {
-            background: linear-gradient(135deg, #f2994a, #f2c94c);
-            color: #110826;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(242, 201, 76, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: 0.2s;
-        }
-
-        .btn-menu {
-            background: #251249;
-            border: 1px solid #48238a;
-            color: white;
-            padding: 15px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            transition: 0.2s;
-        }
-
-        .btn-menu:hover {
-            background: #351a68;
-        }
-
-        /* 2. INTERFACE DE JEU */
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .stat-badge {
-            background: #200f40;
-            border: 1px solid #421f7c;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .logo-box {
-            background: white;
-            border-radius: 20px;
-            height: 220px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-        }
-
-        .logo-box img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-        }
-
-        .question-text {
-            text-align: center;
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .answers-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .btn-answer {
-            background: #251249;
-            border: 1px solid #4a258a;
-            color: white;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            text-align: center;
-        }
-
-        .btn-answer.correct {
-            background: #27ae60;
-            border-color: #2ecc71;
-        }
-
-        .game-actions {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .btn-action-game {
-            background: #251249;
-            border: 1px solid #4a258a;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .xp-reward {
-            text-align: center;
-            color: var(--yellow-accent);
-            font-weight: bold;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        /* 3. NIVEAUX */
-        .level-card {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        .level-card.unlocked {
-            border-color: #27ae60;
-        }
-
-        .level-info-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .shield {
-            width: 50px;
-            height: 60px;
-            background: #1a0b36;
-            border: 2px solid #5b21b6;
-            border-radius: 10px 10px 25px 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 18px;
-            color: #d8b4fe;
-        }
-
-        .level-card.unlocked .shield {
-            border-color: #27ae60;
-            color: #2ecc71;
-            background: #0f2d1c;
-        }
-
-        .level-details h4 {
-            font-size: 15px;
-            margin-bottom: 2px;
-        }
-
-        .level-details p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .level-details .status-facile { color: #27ae60; font-weight: bold; }
-        .level-details .status-normal { color: #3498db; font-weight: bold; }
-        .level-details .status-difficile { color: #f39c12; font-weight: bold; }
-        .level-details .status-expert { color: #9b51e0; font-weight: bold; }
-
-        .level-right {
-            text-align: right;
-        }
-
-        .stars-container {
-            color: var(--yellow-accent);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .percent-badge {
-            background: #102d1d;
-            color: #27ae60;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        /* 4. PROFIL */
-        .profile-top-card {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #4a258a;
-            margin: 0 auto 10px;
-            border: 3px solid #9b51e0;
-            overflow: hidden;
-        }
-
-        .profile-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 12px;
-            padding: 10px 4px;
-            text-align: center;
-        }
-
-        .stat-box .stat-value {
-            font-size: 15px;
-            font-weight: bold;
-            margin-top: 4px;
-        }
-
-        .stat-box .stat-label {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .section-subtitle {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-        }
-
-        .achievement-card {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 14px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .achievement-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .achievement-icon {
-            font-size: 24px;
-        }
-
-        .achievement-text h5 {
-            font-size: 13px;
-        }
-
-        .achievement-text p {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .check-circle {
-            background: #27ae60;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        /* 5. RÉCOMPENSES */
-        .tabs-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-        }
-
-        .tab {
-            background: #200f40;
-            border: 1px solid #421f7c;
-            color: var(--text-secondary);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .tab.active {
-            background: #7c3aed;
-            color: white;
-            border-color: #9b51e0;
-        }
-
-        .rewards-banner {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .rewards-banner-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-        }
-
-        .daily-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .daily-item {
-            background: #160a2f;
-            border: 1px solid #3c1f75;
-            border-radius: 10px;
-            padding: 8px 4px;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .daily-item.claimed {
-            border-color: #27ae60;
-        }
-
-        .badges-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .badge-box {
-            background: var(--panel-bg);
-            border: 1px solid #3c1f75;
-            border-radius: 14px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        /* Navigation Bar Bottom */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background: #110826;
-            border-top: 1px solid #3a1c71;
-            padding: 10px 0;
-            margin-top: auto;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .nav-item.active {
-            color: #d8b4fe;
-        }
-
-        .nav-item span {
-            font-size: 16px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Logo Quiz - Modern Gaming</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="phone-container">
-
-        <!-- 1. INTERFACE ACCUEIL -->
-        <div id="accueil" class="screen active">
-            <div class="top-nav-accueil">
-                <button class="btn-icon">⚙️</button>
-                <div class="screen-title">1. Accueil</div>
-                <button class="btn-icon">🎁</button>
-            </div>
-
-            <div class="logo-title-container">
-                <div class="logo-title">
-                    <span>LOGO</span><br>
-                    <span>QUIZ</span>
+    <div id="particles"></div>
+    <div id="app">
+        
+        <!-- ACCUEIL -->
+        <section id="home-screen" class="screen active">
+            <header>
+                <button class="icon-btn" onclick="showScreen('settings-screen')">⚙</button>
+                <h1 class="glow-text">LOGO QUIZ</h1>
+                <button class="icon-btn" onclick="showScreen('rewards-screen')">🎁</button>
+            </header>
+            
+            <div class="player-card card">
+                <div class="avatar-container">
+                    <div class="avatar">MR</div>
                 </div>
-            </div>
-
-            <div class="user-card-accueil">
-                <div class="avatar">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="avatar">
-                </div>
-                <div class="user-info">
-                    <h4>mohamed reda</h4>
-                    <span class="badge-lvl">Niveau 12</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                <div class="player-info">
+                    <h2 id="home-name">mohamed reda</h2>
+                    <span class="level-badge">Niveau <span id="home-level">12</span></span>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar" id="home-xp-bar"></div>
                     </div>
+                    <span class="xp-text"><span id="home-xp">850</span> / <span id="home-next-xp">1600</span> XP</span>
+                    <div class="streak">🔥 Série <span id="home-streak">7</span></div>
                 </div>
             </div>
 
-            <div class="streak-card">
-                <div class="fire">🔥</div>
-                <div class="count">7</div>
-                <div class="label">Série</div>
+            <div class="main-menu">
+                <button class="btn btn-primary btn-large" onclick="startGame()">▶ JOUER</button>
+                <button class="btn btn-secondary" onclick="showScreen('levels-screen')">▥ NIVEAUX</button>
+                <button class="btn btn-secondary" onclick="showScreen('rewards-screen')">🎁 RÉCOMPENSES</button>
+                <button class="btn btn-secondary" onclick="showScreen('leaderboard-screen')">🏆 CLASSEMENT</button>
             </div>
 
-            <div class="menu-buttons" style="margin-top: 20px;">
-                <button class="btn-main" onclick="switchScreen('jeu')">▶ JOUER</button>
-                <button class="btn-menu" onclick="switchScreen('niveaux')">📊 NIVEAUX</button>
-                <button class="btn-menu" onclick="switchScreen('profil')">🏆 CLASSEMENT / PROFIL</button>
-                <button class="btn-menu" onclick="switchScreen('recompenses')">🎁 RÉCOMPENSES</button>
-                <button class="btn-menu" onclick="switchScreen('profil')">🛒 BOUTIQUE</button>
+            <div class="next-reward card mini-card">
+                <h3>Prochaine récompense</h3>
+                <div class="reward-progress">
+                    <span id="reward-xp-text">850 / 1600 XP</span>
+                    <span>🎁 Coffre Bronze</span>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- 2. INTERFACE DE JEU -->
-        <div id="jeu" class="screen">
-            <div class="game-header">
-                <button class="btn-icon" onclick="switchScreen('accueil')">⬅</button>
-                <div class="stat-badge">❤️ 3</div>
-                <div style="font-size: 13px; font-weight: bold;">Question 5 / 20</div>
-                <div class="stat-badge">⭐ 1250</div>
-            </div>
+        <!-- JEU -->
+        <section id="game-screen" class="screen">
+            <header class="game-header">
+                <div class="stat">❤️ <span id="game-lives">3</span></div>
+                <div class="stat">⭐ <span id="game-score">1250</span></div>
+                <div class="stat">🪙 <span id="game-coins">250</span></div>
+            </header>
 
-            <div class="progress-bar" style="margin-bottom: 20px;">
-                <div class="progress-fill" style="width: 25%;"></div>
-            </div>
-
-            <div class="logo-box">
-                <!-- Exemple Logo Nike -->
-                <svg width="150" height="70" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M280 20 C 150 20, 50 80, 20 100 C 70 80, 140 40, 200 40 C 220 40, 250 30, 280 20 Z" fill="black"/>
-                </svg>
+            <div class="question-progress">
+                <span>Question <span id="current-q">5</span> / <span id="total-q">20</span></span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="q-progress"></div>
+                </div>
             </div>
 
-            <div class="question-text">Quel est ce logo ?</div>
+            <div class="logo-container">
+                <img id="logo-image" src="" alt="Logo à deviner">
+            </div>
+            
+            <h2 class="question-text">Quel est ce logo ?</h2>
 
-            <div class="answers-grid">
-                <button class="btn-answer correct" onclick="switchScreen('accueil')">Nike</button>
-                <button class="btn-answer" onclick="switchScreen('accueil')">Adidas</button>
-                <button class="btn-answer" onclick="switchScreen('accueil')">Puma</button>
-                <button class="btn-answer" onclick="switchScreen('accueil')">Reebok</button>
+            <div class="options-grid" id="options-container">
+                <!-- Généré dynamiquement -->
             </div>
 
             <div class="game-actions">
-                <button class="btn-action-game">💡 Indice (2)</button>
-                <button class="btn-action-game">⏩ Passer (1)</button>
+                <button class="btn btn-action" onclick="useHint()">💡 Indice (-50🪙)</button>
+                <button class="btn btn-action" onclick="skipQuestion()">⏭ Passer</button>
             </div>
+        </section>
 
-            <div class="xp-reward">✨ + 25 XP ✨</div>
-        </div>
-
-        <!-- 3. INTERFACE DES NIVEAUX -->
-        <div id="niveaux" class="screen">
-            <div class="header-top">
-                <button class="btn-icon" onclick="switchScreen('accueil')">⬅</button>
-                <div class="screen-title">Niveaux</div>
-                <div class="stat-badge">⭐ 1250</div>
+        <!-- NIVEAUX -->
+        <section id="levels-screen" class="screen">
+            <header>
+                <h1 class="glow-text">NIVEAUX</h1>
+            </header>
+            <div class="levels-grid" id="levels-container">
+                <!-- Généré dynamiquement -->
             </div>
+        </section>
 
-            <div class="level-card unlocked" onclick="switchScreen('jeu')">
-                <div class="level-info-left">
-                    <div class="shield">1</div>
-                    <div class="level-details">
-                        <h4>NIVEAU 1</h4>
-                        <p class="status-facile">FACILE</p>
-                        <p>10 logos</p>
-                    </div>
+        <!-- FIN DE PARTIE -->
+        <section id="end-screen" class="screen">
+            <h1 class="glow-text text-center">FÉLICITATIONS !</h1>
+            <div class="stars text-center">⭐⭐⭐</div>
+            
+            <div class="results-card card">
+                <div class="result-row">
+                    <span>Score final</span>
+                    <strong id="end-score" class="color-gold">2450</strong>
                 </div>
-                <div class="level-right">
-                    <span class="percent-badge">100%</span>
-                    <div class="stars-container">⭐⭐⭐</div>
+                <div class="result-row">
+                    <span>Bonnes réponses</span>
+                    <strong id="end-correct">18 / 20</strong>
                 </div>
-            </div>
-
-            <div class="level-card">
-                <div class="level-info-left">
-                    <div class="shield">2</div>
-                    <div class="level-details">
-                        <h4>NIVEAU 2</h4>
-                        <p class="status-normal">NORMAL</p>
-                        <p>20 logos</p>
-                    </div>
-                </div>
-                <div class="level-right">
-                    <span>🔒</span>
+                <div class="result-row">
+                    <span>XP gagnée</span>
+                    <strong class="color-green" id="end-xp">+150 XP</strong>
                 </div>
             </div>
 
-            <div class="level-card">
-                <div class="level-info-left">
-                    <div class="shield">3</div>
-                    <div class="level-details">
-                        <h4>NIVEAU 3</h4>
-                        <p class="status-difficile">DIFFICILE</p>
-                        <p>30 logos</p>
-                    </div>
-                </div>
-                <div class="level-right">
-                    <span>🔒</span>
-                </div>
+            <div class="reward-box card text-center">
+                <h3>🏆 Récompense obtenue</h3>
+                <p class="color-gold">Coffre Bronze</p>
             </div>
 
-            <div class="level-card">
-                <div class="level-info-left">
-                    <div class="shield">4</div>
-                    <div class="level-details">
-                        <h4>NIVEAU 4</h4>
-                        <p class="status-expert">EXPERT</p>
-                        <p>40 logos</p>
-                    </div>
+            <div class="end-actions">
+                <button class="btn btn-primary" onclick="startGame()">REJOUER</button>
+                <button class="btn btn-secondary" onclick="showScreen('home-screen')">MENU PRINCIPAL</button>
+            </div>
+        </section>
+
+        <!-- RÉCOMPENSES -->
+        <section id="rewards-screen" class="screen">
+            <header>
+                <h1 class="glow-text">RÉCOMPENSES</h1>
+            </header>
+            <div class="tabs">
+                <button class="tab active">Quotidiennes</button>
+                <button class="tab">Badges</button>
+            </div>
+            
+            <div class="daily-rewards card">
+                <h3>Série quotidienne</h3>
+                <div class="days-grid" id="daily-grid">
+                    <!-- Généré dynamiquement -->
                 </div>
-                <div class="level-right">
-                    <span>🔒</span>
-                </div>
+                <button class="btn btn-primary mt-3" id="claim-reward-btn" onclick="claimDailyReward()">RÉCUPÉRER</button>
             </div>
 
-            <!-- Barre de Navigation Basse -->
-            <div class="bottom-nav">
-                <button class="nav-item" onclick="switchScreen('accueil')"><span>🏠</span>Accueil</button>
-                <button class="nav-item active" onclick="switchScreen('niveaux')"><span>📊</span>Niveaux</button>
-                <button class="nav-item" onclick="switchScreen('profil')"><span>🏆</span>Classement</button>
-                <button class="nav-item" onclick="switchScreen('recompenses')"><span>🛒</span>Boutique</button>
+            <div class="badges-section mt-3" id="badges-container">
+                <!-- Généré dynamiquement -->
             </div>
-        </div>
+        </section>
 
-        <!-- 4. INTERFACE PROFIL -->
-        <div id="profil" class="screen">
-            <div class="header-top">
-                <button class="btn-icon" onclick="switchScreen('accueil')">⬅</button>
-                <div class="screen-title">Profil</div>
-                <button class="btn-icon">✏️</button>
-            </div>
-
-            <div class="profile-top-card">
-                <div class="profile-avatar">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="avatar">
+        <!-- PROFIL -->
+        <section id="profile-screen" class="screen">
+            <header>
+                <h1 class="glow-text">PROFIL</h1>
+            </header>
+            
+            <div class="profile-header text-center mt-2">
+                <div class="avatar large-avatar mx-auto">MR</div>
+                <h2 id="prof-name">mohamed reda</h2>
+                <p class="color-purple">Niveau <span id="prof-level">12</span></p>
+                <div class="xp-bar-container mx-auto" style="width: 80%;">
+                    <div class="xp-bar" id="prof-xp-bar"></div>
                 </div>
-                <h3>mohamed reda</h3>
-                <span class="badge-lvl" style="margin-top: 6px;">Niveau 12</span>
-                <div class="progress-bar" style="margin-top: 8px;">
-                    <div class="progress-fill" style="width: 70%;"></div>
-                </div>
+                <span class="xp-text"><span id="prof-xp">850</span> / <span id="prof-next-xp">1600</span> XP</span>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Meilleur score</div>
-                    <div class="stat-value">2450</div>
+            <div class="stats-grid mt-3">
+                <div class="stat-card">
+                    <span class="stat-icon">🏆</span>
+                    <span class="stat-val" id="prof-best-score">2450</span>
+                    <span class="stat-label">Meilleur score</span>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Logos trouvés</div>
-                    <div class="stat-value">132</div>
+                <div class="stat-card">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-val" id="prof-logos">132</span>
+                    <span class="stat-label">Logos trouvés</span>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Série</div>
-                    <div class="stat-value">7 jours</div>
+                <div class="stat-card">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-val" id="prof-streak">7</span>
+                    <span class="stat-label">Série (jours)</span>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Parties</div>
-                    <div class="stat-value">28</div>
-                </div>
-            </div>
-
-            <div class="section-subtitle">Succès récents</div>
-
-            <div class="achievement-card">
-                <div class="achievement-info">
-                    <div class="achievement-icon">🔥</div>
-                    <div class="achievement-text">
-                        <h5>Série de 7 jours</h5>
-                        <p>Atteindre une série de 7 jours</p>
-                    </div>
-                </div>
-                <div class="check-circle">✓</div>
-            </div>
-
-            <div class="achievement-card">
-                <div class="achievement-info">
-                    <div class="achievement-icon">🏆</div>
-                    <div class="achievement-text">
-                        <h5>Maître des logos</h5>
-                        <p>Trouve 100 logos</p>
-                    </div>
-                </div>
-                <div class="check-circle">✓</div>
-            </div>
-        </div>
-
-        <!-- 5. INTERFACE RÉCOMPENSES -->
-        <div id="recompenses" class="screen">
-            <div class="header-top">
-                <button class="btn-icon" onclick="switchScreen('accueil')">⬅</button>
-                <div class="screen-title">Récompenses</div>
-                <div style="width: 42px;"></div>
-            </div>
-
-            <div class="tabs-container">
-                <div class="tab active">Quotidiennes ⭐</div>
-                <div class="tab">Badges</div>
-                <div class="tab">Coffres</div>
-                <div class="tab">Succès</div>
-            </div>
-
-            <div class="rewards-banner">
-                <div class="rewards-banner-header">
-                    <span>Récompense quotidienne</span>
-                    <span>🕒 19:45:32</span>
-                </div>
-                <div class="daily-grid">
-                    <div class="daily-item claimed">Jour 1<br>✓ 50 XP</div>
-                    <div class="daily-item claimed">Jour 2<br>✓ 75 XP</div>
-                    <div class="daily-item claimed">Jour 3<br>✓ 100 XP</div>
-                    <div class="daily-item" style="border-color: var(--yellow-accent);">Jour 4<br>🎁 150 XP</div>
+                <div class="stat-card">
+                    <span class="stat-icon">🎮</span>
+                    <span class="stat-val" id="prof-games">28</span>
+                    <span class="stat-label">Parties jouées</span>
                 </div>
             </div>
+        </section>
 
-            <div class="section-subtitle">Badges</div>
-            <div class="badges-grid">
-                <div class="badge-box">
-                    <div style="font-size: 28px; margin-bottom: 5px;">🛡️</div>
-                    <h5 style="font-size: 13px;">Débutant</h5>
-                    <p style="font-size: 11px; color: var(--text-secondary);">Joue 10 parties</p>
+        <!-- PARAMÈTRES -->
+        <section id="settings-screen" class="screen">
+            <header>
+                <h1 class="glow-text">PARAMÈTRES</h1>
+            </header>
+            <div class="settings-list card mt-2">
+                <div class="setting-item">
+                    <span>🔊 Son</span>
+                    <label class="switch"><input type="checkbox" id="set-sound" checked><span class="slider"></span></label>
                 </div>
-                <div class="badge-box">
-                    <div style="font-size: 28px; margin-bottom: 5px;">⭐</div>
-                    <h5 style="font-size: 13px;">Connaisseur</h5>
-                    <p style="font-size: 11px; color: var(--text-secondary);">Trouve 50 logos</p>
+                <div class="setting-item">
+                    <span>🎵 Musique</span>
+                    <label class="switch"><input type="checkbox" id="set-music" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item">
+                    <span>🌙 Mode sombre</span>
+                    <label class="switch"><input type="checkbox" id="set-dark" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item">
+                    <span>📱 Vibrations</span>
+                    <label class="switch"><input type="checkbox" id="set-vib" checked><span class="slider"></span></label>
+                </div>
+                <div class="setting-item">
+                    <span>🌍 Langue</span>
+                    <span class="color-purple">Français</span>
                 </div>
             </div>
-        </div>
+            
+            <button class="btn btn-danger mt-3" onclick="resetProgress()">Réinitialiser la progression</button>
+        </section>
 
+        <!-- CLASSEMENT -->
+        <section id="leaderboard-screen" class="screen">
+            <header>
+                <h1 class="glow-text">CLASSEMENT</h1>
+            </header>
+            <div class="leaderboard-list card mt-2" id="leaderboard-container">
+                <!-- Dynamique -->
+            </div>
+        </section>
+
+        <!-- NAVIGATION BAS (Mobile) -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="showScreen('home-screen')">🏠<br><span>Accueil</span></button>
+            <button class="nav-btn" onclick="startGame()">🎮<br><span>Jouer</span></button>
+            <button class="nav-btn" onclick="showScreen('levels-screen')">▥<br><span>Niveaux</span></button>
+            <button class="nav-btn" onclick="showScreen('leaderboard-screen')">🏆<br><span>Classement</span></button>
+            <button class="nav-btn" onclick="showScreen('profile-screen')">👤<br><span>Profil</span></button>
+        </nav>
     </div>
 
-    <script>
-        function switchScreen(screenId) {
-            const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => {
-                screen.classList.remove('active');
-            });
-            const targetScreen = document.getElementById(screenId);
-            if (targetScreen) {
-                targetScreen.classList.add('active');
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+:root {
+    --bg-dark: #0a0616;
+    --bg-card: #160e2a;
+    --primary: #8a2be2;
+    --primary-hover: #9d4edd;
+    --secondary: #2a1b42;
+    --text-main: #ffffff;
+    --text-muted: #a09eb0;
+    --success: #00e676;
+    --danger: #ff1744;
+    --gold: #ffd700;
+    --border-radius: 16px;
+    --glow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    user-select: none;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+#app {
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    position: relative;
+    background: radial-gradient(circle at top, #1a0f30 0%, var(--bg-dark) 100%);
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 80px;
+}
+
+/* Typography & Colors */
+h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+.color-purple { color: var(--primary); }
+.color-gold { color: var(--gold); }
+.color-green { color: var(--success); }
+.text-center { text-align: center; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.glow-text {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    text-shadow: var(--glow);
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+/* Screens */
+.screen {
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-out;
+}
+.screen.active { display: flex; }
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+    color: white;
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #6a1b9a);
+    box-shadow: var(--glow);
+}
+.btn-primary:active { transform: scale(0.96); box-shadow: 0 0 5px rgba(138,43,226,0.8); }
+.btn-secondary {
+    background: var(--secondary);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+}
+.btn-action { background: var(--secondary); font-size: 0.9rem; padding: 12px; }
+.btn-danger { background: rgba(255, 23, 68, 0.2); border: 1px solid var(--danger); color: var(--danger); }
+.btn-large { font-size: 1.2rem; padding: 18px; }
+
+.icon-btn {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+}
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+}
+.mini-card { padding: 15px; }
+
+/* Player Card (Home) */
+.player-card { display: flex; align-items: center; gap: 15px; }
+.avatar-container { position: relative; }
+.avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff007f, var(--primary));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; font-weight: bold; border: 3px solid var(--bg-dark);
+}
+.large-avatar { width: 90px; height: 90px; font-size: 2.2rem; }
+.player-info h2 { font-size: 1.1rem; margin-bottom: 2px; }
+.level-badge { font-size: 0.8rem; background: var(--primary); padding: 2px 8px; border-radius: 10px; }
+
+/* XP Bars */
+.xp-bar-container {
+    width: 100%; height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px; margin: 8px 0 4px; overflow: hidden;
+}
+.xp-bar {
+    height: 100%; background: var(--gold);
+    width: 50%; transition: width 0.5s ease;
+}
+.xp-text { font-size: 0.75rem; color: var(--text-muted); }
+.streak { font-size: 0.85rem; color: #ff9800; margin-top: 5px; font-weight: bold; }
+
+/* Game Interface */
+.game-header { background: var(--bg-card); padding: 10px 20px; border-radius: 20px; }
+.stat { font-weight: 600; font-size: 1.1rem; }
+.question-progress { text-align: center; margin: 15px 0; font-size: 0.9rem; color: var(--text-muted); }
+.progress-bar-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 5px; }
+.progress-bar { height: 100%; background: var(--primary); width: 25%; transition: width 0.3s; }
+
+.logo-container {
+    background: white; border-radius: 20px; padding: 30px;
+    height: 220px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; box-shadow: 0 5px 25px rgba(255,255,255,0.1);
+}
+.logo-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.question-text { text-align: center; margin-bottom: 20px; font-size: 1.3rem; }
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.option-btn {
+    background: var(--bg-card); border: 2px solid rgba(138,43,226,0.3);
+    padding: 18px 10px; border-radius: 12px; color: white;
+    font-weight: 600; font-size: 1rem; transition: all 0.2s; cursor: pointer;
+}
+.option-btn.correct { background: var(--success); border-color: var(--success); color: #000; box-shadow: 0 0 15px var(--success); }
+.option-btn.wrong { background: var(--danger); border-color: var(--danger); animation: shake 0.4s; }
+.game-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+/* Levels & Rewards */
+.levels-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+.level-card {
+    background: var(--bg-card); padding: 20px; border-radius: 12px;
+    display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1);
+}
+.level-card.locked { opacity: 0.5; filter: grayscale(100%); }
+.level-info h3 { font-size: 1.2rem; }
+.level-info p { font-size: 0.85rem; color: var(--text-muted); }
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab { flex: 1; padding: 10px; background: transparent; border: 1px solid var(--primary); color: white; border-radius: 8px; cursor: pointer; }
+.tab.active { background: var(--primary); }
+
+.days-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.day-box {
+    background: var(--secondary); padding: 10px 5px; border-radius: 8px;
+    text-align: center; font-size: 0.8rem; border: 1px solid transparent;
+}
+.day-box.claimed { border-color: var(--success); opacity: 0.6; }
+.day-box.today { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+
+/* Badges */
+.badge-item {
+    display: flex; align-items: center; gap: 15px; background: var(--secondary);
+    padding: 15px; border-radius: 12px; margin-bottom: 10px;
+}
+.badge-icon { font-size: 2rem; }
+.badge-info { flex: 1; }
+.badge-info h4 { margin-bottom: 5px; }
+
+/* Settings & Profile */
+.setting-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.setting-item:last-child { border-bottom: none; }
+.switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--primary); }
+input:checked + .slider:before { transform: translateX(24px); }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.stat-card { background: var(--bg-card); padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; }
+.stat-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.stat-val { font-weight: bold; font-size: 1.2rem; }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); }
+
+/* Leaderboard */
+.leaderboard-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.rank { width: 30px; font-weight: bold; color: var(--gold); }
+.lb-name { flex: 1; }
+.lb-score { font-weight: bold; color: var(--primary); }
+
+/* Bottom Nav */
+.bottom-nav {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    background: rgba(10, 6, 22, 0.95); backdrop-filter: blur(10px);
+    display: flex; justify-content: space-around; padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,0.05); z-index: 100;
+}
+.nav-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.2rem; cursor: pointer; transition: color 0.3s;
+}
+.nav-btn span { display: block; font-size: 0.7rem; margin-top: 4px; }
+.nav-btn.active { color: var(--primary); text-shadow: var(--glow); }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
+
+/* Particles */
+#particles { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 0; background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="150" cy="80" r="1.5" fill="rgba(138,43,226,0.3)"/><circle cx="80" cy="160" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat; }
+
+/* Responsive (PC/Tablet to Mobile) */
+@media (min-width: 481px) {
+    body { background: #05020a; }
+    #app { border-radius: 24px; height: 95vh; margin: auto; }
+    .bottom-nav { border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+}
+/* --- BASE DE DONNÉES DES LOGOS (Auto, Retro Gaming, Sports) --- */
+const logoDatabase = [
+    // Auto
+    { logo: "https://logo.clearbit.com/audi.com", answer: "Audi", options: ["BMW", "Audi", "Mercedes", "Porsche"], category: "Auto", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/ford.com", answer: "Ford", options: ["Chevrolet", "Toyota", "Ford", "Honda"], category: "Auto", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/toyota.com", answer: "Toyota", options: ["Nissan", "Toyota", "Mazda", "Subaru"], category: "Auto", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/ferrari.com", answer: "Ferrari", options: ["Lamborghini", "Porsche", "Ferrari", "Maserati"], category: "Auto", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/lamborghini.com", answer: "Lamborghini", options: ["Ferrari", "Bugatti", "Lamborghini", "McLaren"], category: "Auto", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/porsche.com", answer: "Porsche", options: ["Porsche", "Audi", "BMW", "Bentley"], category: "Auto", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/nissan.com", answer: "Nissan", options: ["Honda", "Toyota", "Nissan", "Mitsubishi"], category: "Auto", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/volkswagen.com", answer: "Volkswagen", options: ["Volvo", "Volkswagen", "BMW", "Opel"], category: "Auto", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/chevrolet.com", answer: "Chevrolet", options: ["Ford", "Dodge", "Chevrolet", "GMC"], category: "Auto", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/subaru.com", answer: "Subaru", options: ["Subaru", "Mitsubishi", "Suzuki", "Mazda"], category: "Auto", difficulty: "hard" },
+    { logo: "https://logo.clearbit.com/mazda.com", answer: "Mazda", options: ["Nissan", "Lexus", "Infiniti", "Mazda"], category: "Auto", difficulty: "hard" },
+    { logo: "https://logo.clearbit.com/bentley.com", answer: "Bentley", options: ["Aston Martin", "Bentley", "Rolls-Royce", "Jaguar"], category: "Auto", difficulty: "hard" },
+    
+    // Retro Gaming / Tech
+    { logo: "https://logo.clearbit.com/nintendo.com", answer: "Nintendo", options: ["Sega", "Nintendo", "Atari", "Sony"], category: "Gaming", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/sega.com", answer: "Sega", options: ["Capcom", "SNK", "Sega", "Konami"], category: "Gaming", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/playstation.com", answer: "PlayStation", options: ["Xbox", "Nintendo", "PlayStation", "Sega"], category: "Gaming", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/xbox.com", answer: "Xbox", options: ["PlayStation", "Xbox", "Alienware", "Razer"], category: "Gaming", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/atari.com", answer: "Atari", options: ["Commodore", "Amiga", "Atari", "Coleco"], category: "Gaming", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/capcom.com", answer: "Capcom", options: ["Konami", "Square Enix", "Capcom", "Namco"], category: "Gaming", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/konami.com", answer: "Konami", options: ["Sega", "Konami", "Taito", "SNK"], category: "Gaming", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/snk-corp.co.jp", answer: "SNK", options: ["SNK", "Capcom", "Arc System Works", "Midway"], category: "Gaming", difficulty: "hard" },
+    { logo: "https://logo.clearbit.com/ea.com", answer: "Electronic Arts", options: ["Ubisoft", "Activision", "Electronic Arts", "Take-Two"], category: "Gaming", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/ubisoft.com", answer: "Ubisoft", options: ["Bethesda", "Ubisoft", "Square Enix", "Valve"], category: "Gaming", difficulty: "normal" },
+
+    // Sports (General Brands)
+    { logo: "https://logo.clearbit.com/nike.com", answer: "Nike", options: ["Adidas", "Puma", "Nike", "Reebok"], category: "Sports", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/adidas.com", answer: "Adidas", options: ["Nike", "Under Armour", "Asics", "Adidas"], category: "Sports", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/puma.com", answer: "Puma", options: ["Puma", "Reebok", "Fila", "Umbro"], category: "Sports", difficulty: "easy" },
+    { logo: "https://logo.clearbit.com/reebok.com", answer: "Reebok", options: ["Under Armour", "Reebok", "Champion", "New Balance"], category: "Sports", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/underarmour.com", answer: "Under Armour", options: ["Nike", "Asics", "Under Armour", "Puma"], category: "Sports", difficulty: "normal" },
+    { logo: "https://logo.clearbit.com/asics.com", answer: "Asics", options: ["Mizuno", "Asics", "Brooks", "Saucony"], category: "Sports", difficulty: "hard" },
+    { logo: "https://logo.clearbit.com/fila.com", answer: "Fila", options: ["Kappa", "Fila", "Ellesse", "Lotto"], category: "Sports", difficulty: "hard" },
+    { logo: "https://logo.clearbit.com/umbro.com", answer: "Umbro", options: ["Umbro", "Macron", "Joma", "Hummel"], category: "Sports", difficulty: "hard" }
+];
+
+/* --- STATE ET LOCALSTORAGE --- */
+const defaultState = {
+    name: "mohamed reda",
+    xp: 850,
+    level: 12,
+    coins: 250,
+    lives: 3,
+    score: 0,
+    highScore: 2450,
+    foundLogos: 132,
+    gamesPlayed: 28,
+    streak: 7,
+    unlockedLevels: [1], // 1=Facile, 2=Normal, 3=Difficile, 4=Expert
+    dailyClaimed: false,
+    badges: { beginner: false, connoisseur: true, expert: true, legend: false },
+    settings: { sound: true, music: true, dark: true, vib: true }
+};
+
+let userState = {};
+let currentGame = { questions: [], currentIndex: 0, correctAnswers: 0, tempScore: 0, tempXp: 0 };
+
+function loadProgress() {
+    try {
+        const saved = localStorage.getItem('logoQuizState');
+        userState = saved ? JSON.parse(saved) : { ...defaultState };
+    } catch (e) {
+        userState = { ...defaultState };
+    }
+    updateUI();
+}
+
+function saveProgress() {
+    try {
+        localStorage.setItem('logoQuizState', JSON.stringify(userState));
+    } catch (e) { console.warn("LocalStorage indisponible"); }
+    updateUI();
+}
+
+/* --- NAVIGATION --- */
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    
+    // Update bottom nav visual
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const btnMap = { 'home-screen': 0, 'levels-screen': 2, 'leaderboard-screen': 3, 'profile-screen': 4 };
+    if(btnMap[screenId] !== undefined) {
+        document.querySelectorAll('.nav-btn')[btnMap[screenId]].classList.add('active');
+    }
+
+    if(screenId === 'levels-screen') renderLevels();
+    if(screenId === 'rewards-screen') renderRewards();
+    if(screenId === 'leaderboard-screen') renderLeaderboard();
+}
+
+/* --- LOGIQUE DE JEU --- */
+function startGame(difficulty = 'easy') {
+    userState.lives = 3;
+    userState.gamesPlayed++;
+    
+    // Filtrer par difficulté ou prendre au hasard
+    let pool = logoDatabase.sort(() => 0.5 - Math.random()).slice(0, 10); // 10 questions par partie
+    
+    currentGame = {
+        questions: pool,
+        currentIndex: 0,
+        correctAnswers: 0,
+        tempScore: 0,
+        tempXp: 0
+    };
+    
+    showScreen('game-screen');
+    loadQuestion();
+    
+    // Active le bouton Jouer de la nav
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-btn')[1].classList.add('active');
+}
+
+function loadQuestion() {
+    if(userState.lives <= 0 || currentGame.currentIndex >= currentGame.questions.length) {
+        finishGame();
+        return;
+    }
+
+    const q = currentGame.questions[currentGame.currentIndex];
+    document.getElementById('current-q').innerText = currentGame.currentIndex + 1;
+    document.getElementById('total-q').innerText = currentGame.questions.length;
+    document.getElementById('q-progress').style.width = `${((currentGame.currentIndex + 1) / currentGame.questions.length) * 100}%`;
+    
+    document.getElementById('logo-image').src = q.logo;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+    
+    // Shuffle options
+    let opts = [...q.options].sort(() => 0.5 - Math.random());
+    opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(btn, opt, q.answer);
+        optionsContainer.appendChild(btn);
+    });
+
+    updateGameHeader();
+}
+
+function checkAnswer(btn, selected, correct) {
+    // Désactiver les boutons
+    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    
+    if (selected === correct) {
+        btn.classList.add('correct');
+        currentGame.correctAnswers++;
+        currentGame.tempScore += 100;
+        currentGame.tempXp += 25;
+        userState.foundLogos++;
+        checkAchievements();
+    } else {
+        btn.classList.add('wrong');
+        userState.lives--;
+        // Montrer la bonne réponse
+        document.querySelectorAll('.option-btn').forEach(b => {
+            if(b.innerText === correct) b.classList.add('correct');
+        });
+    }
+
+    setTimeout(() => {
+        nextQuestion();
+    }, 1000);
+}
+
+function nextQuestion() {
+    currentGame.currentIndex++;
+    loadQuestion();
+}
+
+function useHint() {
+    if(userState.coins >= 50) {
+        userState.coins -= 50;
+        updateGameHeader();
+        const q = currentGame.questions[currentGame.currentIndex];
+        const btns = document.querySelectorAll('.option-btn');
+        let hidden = 0;
+        btns.forEach(b => {
+            if(b.innerText !== q.answer && hidden < 2 && !b.disabled) {
+                b.style.visibility = 'hidden';
+                hidden++;
+            }
+        });
+    }
+}
+
+function skipQuestion() {
+    nextQuestion();
+}
+
+function finishGame() {
+    userState.score += currentGame.tempScore;
+    if(userState.score > userState.highScore) userState.highScore = userState.score;
+    updateXP(currentGame.tempXp);
+    saveProgress();
+
+    document.getElementById('end-score').innerText = currentGame.tempScore;
+    document.getElementById('end-correct').innerText = `${currentGame.correctAnswers} / ${currentGame.questions.length}`;
+    document.getElementById('end-xp').innerText = `+${currentGame.tempXp} XP`;
+
+    // Unlock logic simple
+    if(currentGame.correctAnswers >= 8 && !userState.unlockedLevels.includes(2)) unlockLevel(2);
+
+    showScreen('end-screen');
+}
+
+/* --- SYSTÈME D'EXPÉRIENCE --- */
+function updateXP(amount) {
+    userState.xp += amount;
+    let nextLvlXP = userState.level * 150 + 500;
+    
+    while(userState.xp >= nextLvlXP) {
+        userState.xp -= nextLvlXP;
+        userState.level++;
+        nextLvlXP = userState.level * 150 + 500;
+    }
+}
+
+function updateGameHeader() {
+    document.getElementById('game-lives').innerText = userState.lives;
+    document.getElementById('game-score').innerText = userState.score + currentGame.tempScore;
+    document.getElementById('game-coins').innerText = userState.coins;
+}
+
+/* --- INTERFACES & MISE A JOUR UI --- */
+function updateUI() {
+    let nextLvlXP = userState.level * 150 + 500;
+    let xpPercent = (userState.xp / nextLvlXP) * 100;
+
+    // Home
+    document.getElementById('home-name').innerText = userState.name;
+    document.getElementById('home-level').innerText = userState.level;
+    document.getElementById('home-xp').innerText = userState.xp;
+    document.getElementById('home-next-xp').innerText = nextLvlXP;
+    document.getElementById('home-streak').innerText = userState.streak;
+    document.getElementById('home-xp-bar').style.width = `${xpPercent}%`;
+    document.getElementById('reward-xp-text').innerText = `${userState.xp} / ${nextLvlXP} XP`;
+
+    // Profile
+    document.getElementById('prof-name').innerText = userState.name;
+    document.getElementById('prof-level').innerText = userState.level;
+    document.getElementById('prof-xp').innerText = userState.xp;
+    document.getElementById('prof-next-xp').innerText = nextLvlXP;
+    document.getElementById('prof-xp-bar').style.width = `${xpPercent}%`;
+    
+    document.getElementById('prof-best-score').innerText = userState.highScore;
+    document.getElementById('prof-logos').innerText = userState.foundLogos;
+    document.getElementById('prof-streak').innerText = userState.streak;
+    document.getElementById('prof-games').innerText = userState.gamesPlayed;
+}
+
+function renderLevels() {
+    const container = document.getElementById('levels-container');
+    container.innerHTML = '';
+    const levelsData = [
+        { id: 1, name: "FACILE", logos: 10, req: 0 },
+        { id: 2, name: "NORMAL", logos: 20, req: 1 },
+        { id: 3, name: "DIFFICILE", logos: 30, req: 2 },
+        { id: 4, name: "EXPERT", logos: 40, req: 3 }
+    ];
+
+    levelsData.forEach(lvl => {
+        const isUnlocked = userState.unlockedLevels.includes(lvl.id);
+        const html = `
+            <div class="level-card ${isUnlocked ? '' : 'locked'}">
+                <div class="level-info">
+                    <h3>Niveau ${lvl.id} - ${lvl.name}</h3>
+                    <p>${lvl.logos} logos</p>
+                </div>
+                <div class="level-status">
+                    ${isUnlocked ? '<span class="color-gold">⭐⭐⭐</span>' : '🔒'}
+                </div>
+            </div>
+        `;
+        container.innerHTML += html;
+    });
+}
+
+function unlockLevel(lvlId) {
+    if(!userState.unlockedLevels.includes(lvlId)) {
+        userState.unlockedLevels.push(lvlId);
+    }
+}
+
+/* --- RÉCOMPENSES ET BADGES --- */
+function renderRewards() {
+    // Quotidiennes
+    const grid = document.getElementById('daily-grid');
+    grid.innerHTML = '';
+    const rewards = [50, 75, 100, 150, 200, 250, 500];
+    
+    for(let i=0; i<7; i++) {
+        let statusClass = '';
+        if(i < userState.streak % 7) statusClass = 'claimed';
+        else if (i === userState.streak % 7 && !userState.dailyClaimed) statusClass = 'today';
+        
+        grid.innerHTML += `
+            <div class="day-box ${statusClass}">
+                <div>Jour ${i+1}</div>
+                <div class="color-gold mt-2">${rewards[i]} XP</div>
+            </div>
+        `;
+    }
+
+    document.getElementById('claim-reward-btn').disabled = userState.dailyClaimed;
+
+    // Badges
+    const badgesContainer = document.getElementById('badges-container');
+    badgesContainer.innerHTML = '<h3>Badges</h3>';
+    const badgesDef = [
+        { id: 'beginner', name: 'Débutant', desc: 'Joue 10 parties', max: 10, val: userState.gamesPlayed, icon: '🥉' },
+        { id: 'connoisseur', name: 'Connaisseur', desc: 'Trouve 50 logos', max: 50, val: userState.foundLogos, icon: '🥈' },
+        { id: 'expert', name: 'Expert', desc: 'Trouve 100 logos', max: 100, val: userState.foundLogos, icon: '🥇' },
+        { id: 'legend', name: 'Légende', desc: 'Trouve 200 logos', max: 200, val: userState.foundLogos, icon: '👑' }
+    ];
+
+    badgesDef.forEach(b => {
+        let percent = Math.min(100, (b.val / b.max) * 100);
+        let unlocked = b.val >= b.max;
+        badgesContainer.innerHTML += `
+            <div class="badge-item">
+                <div class="badge-icon ${unlocked ? '' : 'locked'}">${b.icon}</div>
+                <div class="badge-info">
+                    <h4>${b.name} ${unlocked ? '✅' : ''}</h4>
+                    <p class="text-muted" style="font-size:0.8rem">${b.desc}</p>
+                    <div class="xp-bar-container">
+                        <div class="xp-bar" style="width: ${percent}%"></div>
+                    </div>
+                    <div style="font-size:0.7rem; text-align:right;">${b.val} / ${b.max}</div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function claimDailyReward() {
+    if(!userState.dailyClaimed) {
+        const rewards = [50, 75, 100, 150, 200, 250, 500];
+        let amount = rewards[userState.streak % 7];
+        updateXP(amount);
+        userState.dailyClaimed = true;
+        userState.streak++;
+        saveProgress();
+        renderRewards();
+    }
+}
+
+function checkAchievements() {
+    if(userState.gamesPlayed >= 10) userState.badges.beginner = true;
+    if(userState.foundLogos >= 50) userState.badges.connoisseur = true;
+    if(userState.foundLogos >= 100) userState.badges.expert = true;
+    if(userState.foundLogos >= 200) userState.badges.legend = true;
+}
+
+/* --- CLASSEMENT --- */
+function renderLeaderboard() {
+    const container = document.getElementById('leaderboard-container');
+    const bots = [
+        { name: "PlayerOne", score: 9850 },
+        { name: "QuizMaster", score: 8740 },
+        { name: "LogoKing", score: 7620 },
+        { name: userState.name, score: userState.highScore },
+        { name: "Player5", score: 5980 }
+    ].sort((a, b) => b.score - a.score);
+
+    container.innerHTML = '';
+    bots.forEach((p, index) => {
+        let rankStr = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+        container.innerHTML += `
+            <div class="leaderboard-item">
+                <div class="rank">${rankStr}</div>
+                <div class="lb-name">${p.name}</div>
+                <div class="lb-score">${p.score} XP</div>
+            </div>
+        `;
+    });
+}
+
+/* --- PARAMÈTRES --- */
+function resetProgress() {
+    if(confirm("Voulez-vous vraiment réinitialiser toute votre progression ?")) {
+        localStorage.removeItem('logoQuizState');
+        loadProgress();
+        showScreen('home-screen');
+    }
+}
+
+// Initialisation
+window.onload = () => {
+    loadProgress();
+    showScreen('home-screen');
+};
