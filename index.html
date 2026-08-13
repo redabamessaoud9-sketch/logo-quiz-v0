@@ -3,87 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Logo Quiz - Modern Gaming</title>
+    <title>Logo Quiz v2</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Poppins:wght@500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="particles"></div>
-    <div id="app">
+    <div id="app" class="app-container">
         
-        <!-- ACCUEIL -->
+        <!-- ================= ACCUEIL ================= -->
         <section id="home-screen" class="screen active">
-            <header>
-                <button class="icon-btn" onclick="showScreen('settings-screen')">⚙</button>
-                <h1 class="glow-text">LOGO QUIZ</h1>
-                <button class="icon-btn" onclick="showScreen('rewards-screen')">🎁</button>
+            <header class="top-bar">
+                <button class="icon-btn glow-hover" onclick="showScreen('settings-screen')">⚙</button>
+                <h1 class="glow-text logo-title">LOGO QUIZ</h1>
+                <button class="icon-btn glow-hover" onclick="showScreen('rewards-screen')">🎁</button>
             </header>
             
-            <div class="player-card card">
+            <div class="player-card card animated-card">
                 <div class="avatar-container">
-                    <div class="avatar">MR</div>
+                    <div class="avatar" id="home-avatar">MR</div>
                 </div>
                 <div class="player-info">
                     <h2 id="home-name">mohamed reda</h2>
-                    <span class="level-badge">Niveau <span id="home-level">12</span></span>
+                    <span class="level-badge pulse-anim">Niveau <span id="home-level">12</span></span>
                     <div class="xp-bar-container">
                         <div class="xp-bar" id="home-xp-bar"></div>
                     </div>
-                    <span class="xp-text"><span id="home-xp">850</span> / <span id="home-next-xp">1600</span> XP</span>
-                    <div class="streak">🔥 Série <span id="home-streak">7</span></div>
+                    <div class="xp-details">
+                        <span class="xp-text"><span id="home-xp">850</span> / <span id="home-next-xp">1600</span> XP</span>
+                        <div class="streak">🔥 Série <span id="home-streak">7</span>j</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-mini-card">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="home-score">1250</span>
+                </div>
+                <div class="stat-mini-card">
+                    <span class="stat-icon">🪙</span>
+                    <span class="stat-value" id="home-coins">250</span>
+                </div>
+                <div class="stat-mini-card">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-value" id="home-found">132</span>
                 </div>
             </div>
 
             <div class="main-menu">
-                <button class="btn btn-primary btn-large" onclick="startGame()">▶ JOUER</button>
-                <button class="btn btn-secondary" onclick="showScreen('levels-screen')">▥ NIVEAUX</button>
-                <button class="btn btn-secondary" onclick="showScreen('rewards-screen')">🎁 RÉCOMPENSES</button>
-                <button class="btn btn-secondary" onclick="showScreen('leaderboard-screen')">🏆 CLASSEMENT</button>
+                <button class="btn btn-primary btn-play pulse-anim" onclick="startQuickGame()">▶ JOUER</button>
+                <div class="menu-grid">
+                    <button class="btn btn-secondary" onclick="showScreen('levels-screen')">▥ NIVEAUX</button>
+                    <button class="btn btn-secondary" onclick="showScreen('rewards-screen')">🎁 RÉCOMPENSES</button>
+                    <button class="btn btn-secondary" onclick="showScreen('leaderboard-screen')">🏆 CLASSEMENT</button>
+                    <button class="btn btn-secondary" onclick="showScreen('profile-screen')">👤 PROFIL</button>
+                </div>
             </div>
 
             <div class="next-reward card mini-card">
                 <h3>Prochaine récompense</h3>
-                <div class="reward-progress">
-                    <span id="reward-xp-text">850 / 1600 XP</span>
-                    <span>🎁 Coffre Bronze</span>
+                <div class="xp-bar-container mt-1">
+                    <div class="xp-bar reward-bar" id="home-reward-bar"></div>
+                </div>
+                <div class="reward-progress mt-1">
+                    <span id="reward-xp-text" class="text-muted">850 / 1600 XP</span>
+                    <span class="color-gold font-bold">🎁 Coffre Bronze</span>
                 </div>
             </div>
         </section>
 
-        <!-- JEU -->
+        <!-- ================= JEU ================= -->
         <section id="game-screen" class="screen">
-            <header class="game-header">
-                <div class="stat">❤️ <span id="game-lives">3</span></div>
-                <div class="stat">⭐ <span id="game-score">1250</span></div>
-                <div class="stat">🪙 <span id="game-coins">250</span></div>
+            <header class="game-header card glass-card">
+                <div class="stat stat-lives">❤️ <span id="game-lives">3</span></div>
+                <div class="stat stat-score">⭐ <span id="game-score">1250</span></div>
+                <div class="stat stat-coins">🪙 <span id="game-coins">250</span></div>
             </header>
 
             <div class="question-progress">
-                <span>Question <span id="current-q">5</span> / <span id="total-q">20</span></span>
+                <span>Question <span id="current-q">1</span> / <span id="total-q">20</span></span>
                 <div class="progress-bar-container">
                     <div class="progress-bar" id="q-progress"></div>
                 </div>
             </div>
 
-            <div class="logo-container">
-                <img id="logo-image" src="" alt="Logo à deviner">
+            <div class="logo-container card" id="logo-wrapper">
+                <div class="image-loader" id="img-loader"></div>
+                <img id="logo-image" src="" alt="Logo à deviner" style="display:none;">
+                <div id="logo-fallback" style="display:none;"><span>?</span></div>
             </div>
             
-            <h2 class="question-text">Quel est ce logo ?</h2>
+            <h2 class="question-text text-center">Quel est ce logo ?</h2>
+
+            <div class="feedback-toast" id="feedback-toast"></div>
 
             <div class="options-grid" id="options-container">
                 <!-- Généré dynamiquement -->
             </div>
 
             <div class="game-actions">
-                <button class="btn btn-action" onclick="useHint()">💡 Indice (-50🪙)</button>
-                <button class="btn btn-action" onclick="skipQuestion()">⏭ Passer</button>
+                <button class="btn btn-action" id="btn-hint" onclick="useHint()">💡 Indice (-50🪙)</button>
+                <button class="btn btn-action" id="btn-skip" onclick="skipQuestion()">⏭ Passer</button>
             </div>
         </section>
 
-        <!-- NIVEAUX -->
+        <!-- ================= NIVEAUX ================= -->
         <section id="levels-screen" class="screen">
-            <header>
+            <header class="top-bar">
                 <h1 class="glow-text">NIVEAUX</h1>
             </header>
             <div class="levels-grid" id="levels-container">
@@ -91,148 +118,204 @@
             </div>
         </section>
 
-        <!-- FIN DE PARTIE -->
+        <!-- ================= FIN DE PARTIE ================= -->
         <section id="end-screen" class="screen">
-            <h1 class="glow-text text-center">FÉLICITATIONS !</h1>
-            <div class="stars text-center">⭐⭐⭐</div>
+            <div id="confetti-container"></div>
+            <h1 class="glow-text text-center title-large" id="end-title">FÉLICITATIONS !</h1>
+            <div class="stars text-center" id="end-stars">⭐⭐⭐</div>
             
-            <div class="results-card card">
+            <div class="results-card card animated-card mt-2">
                 <div class="result-row">
                     <span>Score final</span>
-                    <strong id="end-score" class="color-gold">2450</strong>
+                    <strong id="end-score-val" class="color-gold text-large">0</strong>
                 </div>
                 <div class="result-row">
                     <span>Bonnes réponses</span>
-                    <strong id="end-correct">18 / 20</strong>
+                    <strong id="end-correct">0 / 20</strong>
+                </div>
+                <div class="result-row">
+                    <span>Précision</span>
+                    <strong id="end-accuracy">0%</strong>
                 </div>
                 <div class="result-row">
                     <span>XP gagnée</span>
-                    <strong class="color-green" id="end-xp">+150 XP</strong>
+                    <strong class="color-green text-large" id="end-xp">+0 XP</strong>
+                </div>
+                <div class="result-row">
+                    <span>Pièces gagnées</span>
+                    <strong class="color-gold" id="end-coins-won">+0 🪙</strong>
                 </div>
             </div>
 
-            <div class="reward-box card text-center">
+            <div class="reward-box card text-center glow-border" id="end-reward-box">
                 <h3>🏆 Récompense obtenue</h3>
-                <p class="color-gold">Coffre Bronze</p>
+                <p class="color-gold font-bold mt-1" id="end-reward-text">Coffre Bronze</p>
             </div>
 
-            <div class="end-actions">
-                <button class="btn btn-primary" onclick="startGame()">REJOUER</button>
+            <div class="end-actions mt-2">
+                <button class="btn btn-primary btn-large" onclick="replayGame()">REJOUER</button>
                 <button class="btn btn-secondary" onclick="showScreen('home-screen')">MENU PRINCIPAL</button>
             </div>
         </section>
 
-        <!-- RÉCOMPENSES -->
+        <!-- ================= RÉCOMPENSES ================= -->
         <section id="rewards-screen" class="screen">
-            <header>
+            <header class="top-bar">
                 <h1 class="glow-text">RÉCOMPENSES</h1>
             </header>
             <div class="tabs">
-                <button class="tab active">Quotidiennes</button>
-                <button class="tab">Badges</button>
+                <button class="tab active" onclick="switchRewardTab('daily')">Quotidiennes</button>
+                <button class="tab" onclick="switchRewardTab('badges')">Badges</button>
             </div>
             
-            <div class="daily-rewards card">
-                <h3>Série quotidienne</h3>
-                <div class="days-grid" id="daily-grid">
-                    <!-- Généré dynamiquement -->
+            <div id="tab-daily" class="tab-content active">
+                <div class="daily-rewards card">
+                    <h3 class="text-center mb-2">Série de connexions</h3>
+                    <div class="days-grid" id="daily-grid">
+                        <!-- Généré dynamiquement -->
+                    </div>
+                    <div class="claim-container mt-3 text-center">
+                        <button class="btn btn-primary btn-large" id="claim-reward-btn" onclick="claimDailyReward()">RÉCUPÉRER</button>
+                        <p id="claim-status" class="text-muted mt-1 font-small"></p>
+                    </div>
                 </div>
-                <button class="btn btn-primary mt-3" id="claim-reward-btn" onclick="claimDailyReward()">RÉCUPÉRER</button>
             </div>
 
-            <div class="badges-section mt-3" id="badges-container">
-                <!-- Généré dynamiquement -->
+            <div id="tab-badges" class="tab-content">
+                <div class="badges-section" id="badges-container">
+                    <!-- Généré dynamiquement -->
+                </div>
             </div>
         </section>
 
-        <!-- PROFIL -->
+        <!-- ================= PROFIL ================= -->
         <section id="profile-screen" class="screen">
-            <header>
+            <header class="top-bar">
                 <h1 class="glow-text">PROFIL</h1>
             </header>
             
-            <div class="profile-header text-center mt-2">
-                <div class="avatar large-avatar mx-auto">MR</div>
-                <h2 id="prof-name">mohamed reda</h2>
-                <p class="color-purple">Niveau <span id="prof-level">12</span></p>
-                <div class="xp-bar-container mx-auto" style="width: 80%;">
+            <div class="profile-header card text-center animated-card">
+                <div class="avatar large-avatar mx-auto" id="prof-avatar">MR</div>
+                <h2 id="prof-name" class="mt-1">mohamed reda</h2>
+                <p class="color-purple font-bold">Niveau <span id="prof-level">12</span></p>
+                <div class="xp-bar-container mx-auto mt-1" style="width: 80%;">
                     <div class="xp-bar" id="prof-xp-bar"></div>
                 </div>
-                <span class="xp-text"><span id="prof-xp">850</span> / <span id="prof-next-xp">1600</span> XP</span>
+                <span class="xp-text mt-1 d-block"><span id="prof-xp">850</span> / <span id="prof-next-xp">1600</span> XP</span>
             </div>
 
-            <div class="stats-grid mt-3">
+            <div class="stats-grid mt-2">
                 <div class="stat-card">
                     <span class="stat-icon">🏆</span>
-                    <span class="stat-val" id="prof-best-score">2450</span>
+                    <span class="stat-val" id="prof-best-score">0</span>
                     <span class="stat-label">Meilleur score</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🎯</span>
-                    <span class="stat-val" id="prof-logos">132</span>
+                    <span class="stat-val" id="prof-logos">0</span>
                     <span class="stat-label">Logos trouvés</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🔥</span>
-                    <span class="stat-val" id="prof-streak">7</span>
+                    <span class="stat-val" id="prof-streak">0</span>
                     <span class="stat-label">Série (jours)</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-icon">🎮</span>
-                    <span class="stat-val" id="prof-games">28</span>
+                    <span class="stat-val" id="prof-games">0</span>
                     <span class="stat-label">Parties jouées</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">✅</span>
+                    <span class="stat-val color-green" id="prof-correct">0</span>
+                    <span class="stat-label">Bonnes rép.</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">❌</span>
+                    <span class="stat-val color-danger" id="prof-wrong">0</span>
+                    <span class="stat-label">Erreurs</span>
                 </div>
             </div>
         </section>
 
-        <!-- PARAMÈTRES -->
+        <!-- ================= PARAMÈTRES ================= -->
         <section id="settings-screen" class="screen">
-            <header>
+            <header class="top-bar">
                 <h1 class="glow-text">PARAMÈTRES</h1>
             </header>
-            <div class="settings-list card mt-2">
+            <div class="settings-list card">
                 <div class="setting-item">
-                    <span>🔊 Son</span>
-                    <label class="switch"><input type="checkbox" id="set-sound" checked><span class="slider"></span></label>
+                    <div class="setting-info">
+                        <span class="setting-icon">🔊</span>
+                        <span>Son</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="set-sound" onchange="toggleSetting('sound')"><span class="slider"></span></label>
                 </div>
                 <div class="setting-item">
-                    <span>🎵 Musique</span>
-                    <label class="switch"><input type="checkbox" id="set-music" checked><span class="slider"></span></label>
+                    <div class="setting-info">
+                        <span class="setting-icon">🎵</span>
+                        <span>Musique</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="set-music" onchange="toggleSetting('music')"><span class="slider"></span></label>
                 </div>
                 <div class="setting-item">
-                    <span>🌙 Mode sombre</span>
-                    <label class="switch"><input type="checkbox" id="set-dark" checked><span class="slider"></span></label>
+                    <div class="setting-info">
+                        <span class="setting-icon">🌙</span>
+                        <span>Mode sombre</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="set-dark" onchange="toggleSetting('dark')"><span class="slider"></span></label>
                 </div>
                 <div class="setting-item">
-                    <span>📱 Vibrations</span>
-                    <label class="switch"><input type="checkbox" id="set-vib" checked><span class="slider"></span></label>
+                    <div class="setting-info">
+                        <span class="setting-icon">📱</span>
+                        <span>Vibrations</span>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="set-vib" onchange="toggleSetting('vib')"><span class="slider"></span></label>
                 </div>
                 <div class="setting-item">
-                    <span>🌍 Langue</span>
-                    <span class="color-purple">Français</span>
+                    <div class="setting-info">
+                        <span class="setting-icon">🌍</span>
+                        <span>Langue</span>
+                    </div>
+                    <span class="color-purple font-bold">Français</span>
                 </div>
             </div>
             
-            <button class="btn btn-danger mt-3" onclick="resetProgress()">Réinitialiser la progression</button>
+            <button class="btn btn-danger mt-3 btn-large" onclick="resetProgress()">⚠ Réinitialiser la progression</button>
         </section>
 
-        <!-- CLASSEMENT -->
+        <!-- ================= CLASSEMENT ================= -->
         <section id="leaderboard-screen" class="screen">
-            <header>
+            <header class="top-bar">
                 <h1 class="glow-text">CLASSEMENT</h1>
             </header>
-            <div class="leaderboard-list card mt-2" id="leaderboard-container">
-                <!-- Dynamique -->
+            <div class="leaderboard-header mt-1">
+                <span>Joueur</span>
+                <span>Score</span>
+            </div>
+            <div class="leaderboard-list card" id="leaderboard-container">
+                <!-- Généré dynamiquement -->
             </div>
         </section>
 
-        <!-- NAVIGATION BAS (Mobile) -->
+        <!-- ================= OVERLAYS ================= -->
+        <div id="level-up-modal" class="modal-overlay">
+            <div class="modal-content card text-center">
+                <h2 class="glow-text color-gold">🎉 NIVEAU SUPÉRIEUR !</h2>
+                <div class="level-badge-large mt-2">Niveau <span id="modal-level">13</span></div>
+                <p class="mt-2 text-muted">Récompense obtenue :</p>
+                <p class="color-gold font-bold text-large mt-1">+<span id="modal-reward">150</span> 🪙</p>
+                <button class="btn btn-primary mt-3" onclick="closeModal('level-up-modal')">CONTINUER</button>
+            </div>
+        </div>
+
+        <!-- ================= NAVIGATION BAS ================= -->
         <nav class="bottom-nav">
-            <button class="nav-btn active" onclick="showScreen('home-screen')">🏠<br><span>Accueil</span></button>
-            <button class="nav-btn" onclick="startGame()">🎮<br><span>Jouer</span></button>
-            <button class="nav-btn" onclick="showScreen('levels-screen')">▥<br><span>Niveaux</span></button>
-            <button class="nav-btn" onclick="showScreen('leaderboard-screen')">🏆<br><span>Classement</span></button>
-            <button class="nav-btn" onclick="showScreen('profile-screen')">👤<br><span>Profil</span></button>
+            <button class="nav-btn active" data-target="home-screen" onclick="showScreen('home-screen')"><span class="nav-icon">🏠</span><span>Accueil</span></button>
+            <button class="nav-btn" onclick="startQuickGame()"><span class="nav-icon">🎮</span><span>Jouer</span></button>
+            <button class="nav-btn" data-target="levels-screen" onclick="showScreen('levels-screen')"><span class="nav-icon">▥</span><span>Niveaux</span></button>
+            <button class="nav-btn" data-target="leaderboard-screen" onclick="showScreen('leaderboard-screen')"><span class="nav-icon">🏆</span><span>Class.</span></button>
+            <button class="nav-btn" data-target="profile-screen" onclick="showScreen('profile-screen')"><span class="nav-icon">👤</span><span>Profil</span></button>
         </nav>
     </div>
 
